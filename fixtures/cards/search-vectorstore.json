@@ -1,0 +1,26 @@
+{
+  "tool_card_version": "0.1",
+  "tool": {
+    "server_id": "research-mcp",
+    "name": "search-vectorstore",
+    "version": "1.0.0",
+    "mcp_server_uri": "https://example.com/mcp/research",
+    "description": "Semantic search over uploaded docs."
+  },
+  "schema": {
+    "input_schema_inline": {
+      "type": "object",
+      "properties": { "query": { "type": "string" }, "top_k": { "type": "integer" } },
+      "required": ["query"]
+    }
+  },
+  "safety": {
+    "side_effect_class": "read",
+    "reversible": true,
+    "rate_limited": false,
+    "pii_exposure": "low",
+    "secrets_exposure": "none",
+    "human_approval_required": false
+  },
+  "audit": { "log_locations": ["s3://research-audit/search/"] }
+}

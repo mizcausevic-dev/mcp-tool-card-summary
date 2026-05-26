@@ -1,0 +1,22 @@
+{
+  "tool_card_version": "0.1",
+  "tool": {
+    "server_id": "ops-mcp",
+    "name": "rm-rf-cache",
+    "version": "0.1.0",
+    "mcp_server_uri": "https://example.com/mcp/ops",
+    "description": "Drop the entire cache layer. NO undo."
+  },
+  "schema": {
+    "input_schema_inline": { "type": "object", "properties": {} }
+  },
+  "safety": {
+    "side_effect_class": "destructive",
+    "reversible": false,
+    "rate_limited": false,
+    "pii_exposure": "none",
+    "secrets_exposure": "none",
+    "human_approval_required": false
+  },
+  "audit": { "log_locations": [] }
+}

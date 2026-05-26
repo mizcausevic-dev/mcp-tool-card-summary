@@ -1,0 +1,27 @@
+{
+  "tool_card_version": "0.1",
+  "tool": {
+    "server_id": "outreach-mcp",
+    "name": "send-email",
+    "version": "1.2.0",
+    "mcp_server_uri": "https://example.com/mcp/outreach",
+    "description": "Send a transactional email via the configured SMTP provider."
+  },
+  "schema": {
+    "input_schema_inline": {
+      "type": "object",
+      "properties": { "to": { "type": "string" }, "subject": { "type": "string" }, "body": { "type": "string" } },
+      "required": ["to", "subject", "body"]
+    }
+  },
+  "safety": {
+    "side_effect_class": "external",
+    "external_systems": ["smtp.example.com"],
+    "reversible": false,
+    "rate_limited": true,
+    "pii_exposure": "high",
+    "secrets_exposure": "reads_secret_material",
+    "human_approval_required": false
+  },
+  "audit": { "log_locations": ["s3://outreach-audit/email/"] }
+}
