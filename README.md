@@ -4,13 +4,13 @@ Fleet-analyze a directory of [MCP Tool Cards](https://github.com/mizcausevic-dev
 
 > Source version: v0.1.0 — Node 20/22 supported, library + CLI. On 2026-10-30, the exact `mcp-tool-card-summary` name returned 404 from the public npm registry. Run it from a checkout as shown below.
 
-## Consolidation review
+## Maintenance and migration
 
-The newer [`mcp-tool-card-fleet-summary`](https://github.com/mizcausevic-dev/mcp-tool-card-fleet-summary) covers this directory-level use case and adds audit and tested-with findings. [Fleet-summary PR #13](https://github.com/mizcausevic-dev/mcp-tool-card-fleet-summary/pull/13) preserves the secrets, reversibility, approval counts, and approval-only gate. That PR is a review candidate; this source and CLI remain available.
+The maintained source replacement, [`mcp-tool-card-fleet-summary`](https://github.com/mizcausevic-dev/mcp-tool-card-fleet-summary), is on `main` at [`6e50f44`](https://github.com/mizcausevic-dev/mcp-tool-card-fleet-summary/commit/6e50f44fb49c7a99f4dad373eeb2fbe8c80adf74). It covers this directory-level use case, adds audit and tested-with findings, and preserves the secrets, reversibility, approval counts, and approval-only gate. This older repository is maintenance and compatibility only; its source and CLI remain available for existing consumers. A reversible GitHub archive is planned only after consumer and link migration, a final reference check, and review of the output and exit-contract differences below. No npm release of the replacement is implied.
 
 The newer package is **not a drop-in replacement** for JSON output, TypeScript types, Markdown, or the one-line summary:
 
-| This report | Fleet-summary PR #13 |
+| This report | Fleet-summary `main` |
 |---|---|
 | `byPii` | `byPiiExposure`, with an additional `unset` count |
 | `bySecrets` | `bySecretsExposure`, with an additional `unset` count |
