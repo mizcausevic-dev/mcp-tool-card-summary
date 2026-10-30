@@ -2,7 +2,25 @@
 
 Fleet-analyze a directory of [MCP Tool Cards](https://github.com/mizcausevic-dev/mcp-tool-card-spec). Counts by side-effect class, PII/secrets exposure, reversibility, human-approval-required; surfaces **approval gaps** (destructive tools that don't declare `human_approval_required: true`).
 
-> Status: v0.1.0 — Node 20/22 supported, library + CLI.
+> Source version: v0.1.0 — Node 20/22 supported, library + CLI. On 2026-10-30, the exact `mcp-tool-card-summary` name returned 404 from the public npm registry. Run it from a checkout as shown below.
+
+## Consolidation review
+
+The newer [`mcp-tool-card-fleet-summary`](https://github.com/mizcausevic-dev/mcp-tool-card-fleet-summary) covers this directory-level use case and adds audit and tested-with findings. [Fleet-summary PR #13](https://github.com/mizcausevic-dev/mcp-tool-card-fleet-summary/pull/13) preserves the secrets, reversibility, approval counts, and approval-only gate. That PR is a review candidate; this source and CLI remain available.
+
+The newer package is **not a drop-in replacement** for JSON output, TypeScript types, Markdown, or the one-line summary:
+
+| This report | Fleet-summary PR #13 |
+|---|---|
+| `byPii` | `byPiiExposure`, with an additional `unset` count |
+| `bySecrets` | `bySecretsExposure`, with an additional `unset` count |
+| `reversibleCount` | `reversibleTools` |
+| `humanApprovalRequiredCount` | `toolsRequiringApproval` |
+| `approvalGaps` | Filter `findings` for `destructive-without-human-approval` |
+| `rows[].rate_limited` | `rows[].rateLimited` |
+| Row ID `server_id/name` | Row ID `server_id:name@version` |
+
+Both CLIs support `--fail-on-gaps` for destructive tools lacking human approval. The newer tool also has `--fail-on-high` for its broader findings. Its one-line report can say `(fail)` for a different high finding while `--fail-on-gaps` exits `0`. Migrate consumers by field and exit contract before any retirement decision.
 
 ## What it produces
 
@@ -15,9 +33,11 @@ Fleet-analyze a directory of [MCP Tool Cards](https://github.com/mizcausevic-dev
 
 ## CLI
 
+From this checkout after `npm install` and `npm run build`:
+
 ```
-npx mcp-tool-card-summary <cards-dir> [--format json|markdown|summary]
-                                      [--fail-on-gaps] [--out FILE]
+node dist/cli.js <cards-dir> [--format json|markdown|summary]
+                              [--fail-on-gaps] [--out FILE]
 ```
 
 `<cards-dir>` is a directory containing one Tool Card JSON file per tool (the shape produced by [`mcp-tool-card-generator`](https://github.com/mizcausevic-dev/mcp-tool-card-generator)).
@@ -32,7 +52,7 @@ Drop it into your CI to fail on the first PR that introduces a destructive Tool 
 ## Library
 
 ```ts
-import { summarize, toMarkdown, toSummary } from "mcp-tool-card-summary";
+import { summarize, toMarkdown, toSummary } from "./dist/index.js";
 
 const report = summarize(cards); // cards: ToolCard[]
 console.log(report.bySideEffect);            // { read, mutating, external, destructive }
